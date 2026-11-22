@@ -1,8 +1,33 @@
-# Hyprland session
+# hypr
 
-These Lua configs target Hyprland 0.57.0. Validate changes without starting a
-second compositor with `Hyprland --verify-config -c "$PWD/hypr/hyprland.lua"`
-from the repository root.
+Personal Hyprland session configuration, targeting Hyprland 0.57 and verified
+with 0.57.2. The Lua files at the repository root are the compositor config.
+
+## Install and validate
+
+Install Hyprland and the [nullshell](https://github.com/x3ng/nullshell) runtime
+and session prerequisites separately. From this checkout:
+
+```sh
+Hyprland --verify-config -c "$PWD/hyprland.lua"
+./install.sh install
+```
+
+The installer links the Lua files into `${XDG_CONFIG_HOME:-$HOME/.config}/hypr`.
+It does not replace existing files or links owned by another checkout. For a
+one-time migration from the former dotfiles package, run
+`./install.sh migrate OLD_HYPR_DIR`, passing the old directory that the existing
+links point to. This replaces only exact links to that directory and retires
+obsolete links it owned, including `hypridle.conf`. Backups, independent files
+and saved monitor layouts stay in place.
+
+Validate the installed entry with
+`Hyprland --verify-config -c "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprland.lua"`.
+Run `hyprctl reload` to reload compositor settings; use a new login to test
+session startup. `./install.sh uninstall` removes only links to this checkout.
+Run `bash tests/install.sh` for the isolated installer checks.
+
+## Session behavior
 
 Workspace identity uses Lua `addressable_name` and IPC/Quickshell `address`.
 Named and special workspaces do not have numeric IDs in 0.57.
@@ -12,7 +37,7 @@ notifications, OSD, wallpaper and idle policy; `Super+Q` calls its launcher IPC 
 `startup.lua` directly starts independent desktop, locker, Polkit and sleep-bridge
 processes. Quickshell uses `--no-duplicate`; no nullshell keepalive units are used.
 The `nullshell` launcher uses native Quickshell named configuration discovery;
-these dotfiles do not locate or deploy its QML.
+this repository does not locate or deploy its QML.
 Do not start another desktop, notification owner or authentication agent alongside it.
 Install nullshell and its system integration before using these configs.
 
@@ -115,7 +140,7 @@ nullshell owns dim/lock/display-off timers and the Keep awake control. Its
 It waits for compositor lock confirmation before releasing the sleep delay
 inhibitor; failures remain subject to logind's maximum delay. On resume it rearms
 the inhibitor and requests display power on. Do not start another sleep bridge.
-Edit timers in **Idle and sleep settings** in the shell; system lid and power-key
+Edit timers in **Idle and lock settings** in the shell; system lid and power-key
 policy is independent of these Lua files.
 
 ## Desktop component ownership
@@ -136,6 +161,5 @@ resources or system integration.
 The existing `quickshell-launcher` and `quickshell:osd` layer namespaces are
 retained by nullshell, so their compositor animation rules remain intentional.
 There is no active Hyprlock, Hyprpaper or standalone hypridle configuration here.
-The installer removes only obsolete symlinks owned by this repository, preserving
-independent user files. Window rules, input settings and key bindings remain
-compositor configuration; confirmed monitor layouts are separate user data.
+Window rules, input settings and key bindings remain compositor configuration;
+confirmed monitor layouts are separate user data.
