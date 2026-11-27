@@ -1,9 +1,10 @@
 -- Autostart (exec-once equivalent)
 hl.on("hyprland.start", function()
-  -- Start independent shell components once; native config discovery is external.
-  hl.exec_cmd("nullshell locker --no-duplicate")
-  hl.exec_cmd("nullshell polkit --no-duplicate")
-  hl.exec_cmd("nullshell desktop --no-duplicate")
+  -- Start independent shell components once with native Quickshell config discovery.
+  hl.exec_cmd("quickshell -c nullshell/lock --no-duplicate")
+  hl.exec_cmd("quickshell -c nullshell/polkit --no-duplicate")
+  hl.exec_cmd("quickshell -c nullshell --no-duplicate")
+  -- Helper: logind sleep coordination, which Quickshell does not provide.
   hl.exec_cmd("nullshell sleep-bridge")
   hl.exec_cmd("clipse -listen")
   hl.exec_cmd("udiskie")

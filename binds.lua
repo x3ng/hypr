@@ -260,7 +260,7 @@ end
 -- ══════════════════════════════════════════════════════════════
 
 -- Application launcher (Q); Super+T launches the terminal.
-hl.bind("SUPER + Q", hl.dsp.exec_cmd("nullshell ipc call launcher toggle"))
+hl.bind("SUPER + Q", hl.dsp.exec_cmd("quickshell ipc -c nullshell call launcher toggle"))
 
 -- Screenshot (region select → annotate with satty → copy)
 local screenshotArea = "sh -c 'geometry=$(slurp) || exit 0; [ -n \"$geometry\" ] || exit 0; grim -g \"$geometry\" - | satty -f - --copy-command wl-copy'"
