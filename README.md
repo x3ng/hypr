@@ -145,8 +145,11 @@ policy is independent of these Lua files.
 
 ## Desktop component ownership
 
-The compositor launches desktop, locker, Polkit and sleep bridge separately.
-`Super+Q` calls `nullshell ipc call launcher toggle`; `Super+M` calls `nullshell lock`.
+The compositor launches desktop, locker and Polkit directly with native
+`quickshell -c ... --no-duplicate` commands and runs `nullshell sleep-bridge` for
+logind coordination. `Super+Q` calls `quickshell ipc -c nullshell call launcher toggle`;
+`Super+M` calls `nullshell lock` (which starts an absent locker and waits for
+compositor lock confirmation).
 The locker owns PAM authentication and remains independent of desktop reloads.
 No supervisor automatically restarts Quickshell. Use its native log/IPC commands
 for diagnostics. Clients terminate when Wayland disconnects; UWSM also handles
